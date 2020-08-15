@@ -1,5 +1,6 @@
- const express = require('express');
-const mongoose = require('mongoose')
+const express = require('express');
+const mongoose = require('mongoose');
+const path = require('path');
 
 const app = express();
 
@@ -22,6 +23,17 @@ mongoose.connect(db, options).then(() => console.log('connected')).catch(err => 
 app.use('/api/secrets', require('./routes/api/secrets'));
 app.use('/api/users', require('./routes/api/users'));
 app.use('/api/auth', require('./routes/api/auth'));
+
+//in Production
+
+if(process.env.NODE_ENV === 'production'){
+	//Use static react folder
+	app.use(express.static('client/build'));
+
+	app.get('*', (req, res) => {
+		res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+	}) 
+}
 
 const port = process.env.PORT || 5000;
 
