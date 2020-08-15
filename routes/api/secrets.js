@@ -28,7 +28,10 @@ Router.post('/', auth, (req, res) => {
 	User.findById(user.id)
 		.then(user => {
 			//create a new secret sub document
-			const newSecret = user.secrets.create({note : req.body.note});
+			const newSecret = user.secrets.create({
+				title : req.body.title,
+				note : req.body.note
+			});
 
 			//Push new secret to database
 			user.secrets.push(newSecret)
