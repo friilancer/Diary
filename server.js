@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const path = require('path');
 const swaggerUI = require('swagger-ui-express');
 const swaggerDoc = require('./swagger.json');
-
 const app = express();
 
 // Parser Middleware
@@ -27,6 +26,7 @@ app.use('/api/users', require('./routes/api/users'));
 app.use('/api/auth', require('./routes/api/auth'));
 app.use('/', swaggerUI.serve, swaggerUI.setup(swaggerDoc));
 
+
 //in Production
 
 if(process.env.NODE_ENV === 'production'){
@@ -39,5 +39,4 @@ if(process.env.NODE_ENV === 'production'){
 }
 
 const port = process.env.PORT || 5000;
-
 app.listen(port);
