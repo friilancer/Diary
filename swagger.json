@@ -1,0 +1,454 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is a Journal-App server",
+    "version": "1.0.0",
+    "title": "Daily Journal",
+    "contact": {
+      "email": "aniediabasi.etukudo@gmail.com"
+    }
+  },
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "User",
+      "description": "Register a new user"
+    },
+    {
+      "name": "auth",
+      "description": "Authenticate an Existing user"
+    },
+    {
+      "name": "secrets",
+      "description": "Access journal notes"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/api/users": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Add a new user",
+        "description": "Creates a new user",
+        "operationId": "createUser",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "New User's data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewUser"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/userPrimaryData"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "msg": {
+                  "type": "string",
+                  "description": "Error message"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Log in an existing user",
+        "description": "Authenticate existing user",
+        "operationId": "userLogin",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Existing User's data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ExistingUser"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/userPrimaryData"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "msg": {
+                  "type": "string",
+                  "description": "Error message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Log in an existing user",
+        "description": "Authenticate existing user",
+        "operationId": "userValidation",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-auth-token",
+            "in": "header",
+            "description": "jwtToken",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/userCompleteData"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "msg": {
+                  "type": "string",
+                  "description": "Error message"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/secrets": {
+      "post": {
+        "tags": [
+          "secrets"
+        ],
+        "summary": "Add a secret",
+        "description": "Add new secret to journal",
+        "operationId": "addSecret",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-auth-token",
+            "in": "header",
+            "description": "jwtToken",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Existing User's data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Secret"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/newSecret"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "secrets"
+        ],
+        "summary": "Get all secrets",
+        "description": "Get journal's secrets",
+        "operationId": "getSecret",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-auth-token",
+            "in": "header",
+            "description": "jwtToken",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/allSecrets"
+            }
+          }
+        }
+      }
+    },
+    "/api/secrets/{id}": {
+      "delete": {
+        "tags": [
+          "secrets"
+        ],
+        "summary": "Get all secrets",
+        "description": "Delete a secrets",
+        "operationId": "deleteSecret",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id of secret to delete",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "x-auth-token",
+            "in": "header",
+            "description": "jwtToken",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "TokenKey": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "x-auth-token"
+    }
+  },
+  "definitions": {
+    "NewUser": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "User's name"
+        },
+        "email": {
+          "type": "string",
+          "description": "Unique user's email"
+        },
+        "password": {
+          "type": "string",
+          "description": "User's password"
+        }
+      }
+    },
+    "ExistingUser": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "Unique user's email"
+        },
+        "password": {
+          "type": "string",
+          "description": "User's password"
+        }
+      }
+    },
+    "Secret": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Secret title"
+        },
+        "note": {
+          "type": "string",
+          "description": "Secret note"
+        }
+      }
+    },
+    "userPrimaryData": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string",
+          "description": "token"
+        },
+        "user": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "User's id"
+            },
+            "name": {
+              "type": "string",
+              "description": "User's name"
+            },
+            "email": {
+              "type": "string",
+              "description": "User's email"
+            }
+          }
+        }
+      }
+    },
+    "allSecrets": {
+      "type": "array",
+      "description": "user's journal",
+      "items": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "note's unique id"
+          },
+          "date": {
+            "type": "string",
+            "description": "date note was created"
+          },
+          "title": {
+            "type": "string",
+            "description": "Title of note"
+          },
+          "note": {
+            "type": "string",
+            "description": "Note details"
+          }
+        }
+      }
+    },
+    "userCompleteData": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "User's id"
+        },
+        "name": {
+          "type": "string",
+          "description": "User's name"
+        },
+        "email": {
+          "type": "string",
+          "description": "User's email"
+        },
+        "secrets": {
+          "type": "array",
+          "description": "user's journal",
+          "items": {
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "note's unique id"
+              },
+              "date": {
+                "type": "string",
+                "description": "date note was created"
+              },
+              "title": {
+                "type": "string",
+                "description": "Title of note"
+              },
+              "note": {
+                "type": "string",
+                "description": "Note details"
+              }
+            }
+          }
+        },
+        "registerDate": {
+          "type": "string",
+          "description": "date user was created"
+        }
+      }
+    },
+    "newSecret": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Secret's id"
+        },
+        "title": {
+          "type": "string",
+          "description": "Secret's title"
+        },
+        "note": {
+          "type": "string",
+          "description": "User's email"
+        },
+        "date": {
+          "type": "string",
+          "description": "date note was created"
+        }
+      }
+    }
+  }
+}
